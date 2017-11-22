@@ -1,12 +1,12 @@
 #claymore hosts array
 claymore_hosts = ['192.168.0.41', '192.168.0.43']
+cycle_seconds = 10
 
 # code modified, tweaked and tailored from code by bertwert
 # on RPi forum thread topic 91796
 import RPi.GPIO as GPIO
 import time
 import urllib2
-from pprint import pprint
 import time
 import itertools
 import json
@@ -55,15 +55,13 @@ try:
                 s = sum(values)
                 while s > 1000:
                     s = int(s/1000)
-                s = str(s) + 'H'
+                s = str(s).zfill(3) + 'H'
             except IOError, e:
                 s = 'Err1'
 
-            print 'Text displayed: ' + s
-
             then = time.time()
 
-            while time.time()-10 < then:
+            while time.time() - cycle_seconds < then:
                 for digit in range(4):
                     for loop in range(0,7):
                         GPIO.output(segments[loop], num[s[digit]][loop])
